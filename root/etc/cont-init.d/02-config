@@ -1,0 +1,33 @@
+#!/usr/bin/with-contenv sh
+
+PUID=${PUID:-1000}
+PGID=${PGID:-1000}
+
+groupmod -o -g "$PGID" www-data
+usermod -o -u "$PUID" -g "$PGID" www-data
+
+echo ''
+echo "Setting 'www-data' (uid/gid) to  '$(id -u www-data) / $(id -g www-data)'"
+
+mkdir -p \
+    /etc/nginx/modules-enabled \
+    /etc/nginx/sites-available
+
+[[ ! -f /etc/nginx/nginx.conf ]] \
+    && cp -f /defaults/nginx/nginx.conf /etc/nginx/nginx.conf \
+    && cp -f /defaults/nginx/mime.types /etc/nginx/mime.types \
+
+[[ $(find /etc/nginx/sites-available -type f | wc -l) -eq 0 ]] \
+    && cmp -s /defaults/nginx/nginx.conf /etc/nginx/nginx.conf \
+    && (cp /defaults/nginx/sites-available/default.conf /etc/nginx/sites-available/default.conf) \
+    || (rm -f /etc/nginx/sites-available/default.conf)
+
+find /defaults/nginx/modules-enabled/ -name '*.conf' -exec cp {} /etc/nginx/modules-enabled/ \;
+
+[[ ! -L /etc/nginx/modules ]] \
+    && ln -s /usr/lib/nginx/modules /etc/nginx/modules
+
+chown -R www-data:www-data /etc/nginx
+chown www-data:www-data /data
+
+echo ''
