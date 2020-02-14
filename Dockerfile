@@ -160,6 +160,7 @@ RUN     \
             export https_proxy=${HTTPS_PROXY}; \
         fi \
         && apk add --no-cache \
+        bash \
         dnsmasq \
         libgcc \
         libldap \
