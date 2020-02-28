@@ -161,6 +161,7 @@ RUN     \
         fi \
         && apk add --no-cache \
         bash \
+        bind-tools \
         dnsmasq \
         libgcc \
         libldap \
