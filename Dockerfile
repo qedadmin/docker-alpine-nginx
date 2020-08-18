@@ -140,7 +140,7 @@ ARG     BUILD_DATE
 ARG     VCS_REF
 ARG     BUILD_VERSION
 
-ARG     S6_OVERLAY_VERSION="v1.22.1.0"
+ARG     S6_OVERLAY_VERSION="v2.0.0.1"
 ARG     S6_OVERLAY_ARCH="amd64"
 ADD     https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-${S6_OVERLAY_ARCH}.tar.gz /tmp/s6-overlay.tar.gz
 ENV     S6_BEHAVIOUR_IF_STAGE2_FAILS=2
@@ -168,6 +168,7 @@ RUN     \
         libmaxminddb \
         libxml2 \
         libxslt \
+        nfs-utils \
         procps \
         shadow \
         && (getent passwd xfs > /dev/null 2>&1 && userdel -f xfs || true) \
